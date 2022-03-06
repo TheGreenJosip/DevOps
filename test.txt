@@ -1,0 +1,8 @@
+view classification / vehicle detection
+● placeholder image detection
+● window segmentation
+● unobstructed surface segmentation
+● shadow segmentation
+● tire segmentation
+● license plate segmentation
+● viewpoint/pose detection 
