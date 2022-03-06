@@ -1,0 +1,67 @@
+# Python3 Programm um Bilder nach Größe zu filtern.
+# auf Bildattributen basierend
+from ast import Num
+from PIL import Image
+from shutil import copyfile
+import os, os.path
+
+workingDirectory = os.getcwd()
+print("Pfad ist: \n" + workingDirectory + '/' + '*')
+
+maxImages = int(input("Wieviele Bilder möchtest du haben?  \n"))
+
+filterHeight = int(input("Gib die maximale Höhe an. \n"))
+filterWidth = int(input("Gib die maximale Höhe an. \n"))
+
+def filterImages(path, thresholdWidth, thresholdHeight):
+    # Definieren des Image-Array 
+    # um nur Bilder abzugleichen
+    imgs = []
+
+    # Alle unterstützten Bildformate
+    # Mehr können hinzugefügt werden
+    valid_images = [".jpg", ".gif", ".png", ".tga", ".jpeg", ".PNG", ".JPG", ".JPEG"]
+
+    for f in os.listdir(path):
+        ext = os.path.splitext(f)[1]
+
+        if ext.lower() not in valid_images:
+            continue
+        imgs.append(f)
+
+    for subdir, files in os.walk(path):
+        for subdir in files:
+            print(os.path.join(subdir, files))
+
+    # Schaue nach ob der Ordner "filteredImages"
+    # existiert oder nicht
+    directory = os.path.join(path, 'filteredImages')
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    # Definiere das Array für die gefilterten Fotos
+    # Speichert alle gebrauchten Fotos
+    filteredImages = []
+
+    for i in imgs:
+        image = Image.open(os.path.join(path, i))
+
+        width, height = image.size
+
+        # Wenn die Bilder eine bestimmte Schwelle unterschreiten
+        if (width < thresholdWidth and height < thresholdHeight):
+            copyfile(os.path.join(path, i), os.path.join(path + '/filteredImages', i))
+            filteredImages.append(i)
+
+    # gib das Array mit den Bildern zurück
+    return filteredImages
+
+
+# Driver Code
+if __name__ == '__main__':
+    filteredImages = []
+
+    # Ordner wo Bilder liegen:
+    # Weiten-/ und Höhenangabe thresholdWidth(in pixels) und
+    # thresholdHeight(in pixels)
+    filteredImages = filterImages(workingDirectory, filterWidth, filterHeight)
